@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{78393E18-9801-4517-A5E4-D4C06A93835B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Automation.UI</RootNamespace>
+    <AssemblyName>Automation.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\Bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="UIAutomationClient" />
+    <Reference Include="UIAutomationTypes" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ElementFinder\SearchEngines\DefaultSearchEngine.cs" />
+    <Compile Include="ElementFinder\SearchEngines\SearchEngine.cs" />
+    <Compile Include="Util\SearchEngines.cs" />
+    <Compile Include="ElementFinder\SearchEngines\TreeWalkerSearchEngine.cs" />
+    <Compile Include="ElementFinder\Matchers\ContainsMatcher.cs" />
+    <Compile Include="ElementFinder\Matchers\EndsWithMatcher.cs" />
+    <Compile Include="ElementFinder\Matchers\ExactMatch.cs" />
+    <Compile Include="Util\Matchers.cs" />
+    <Compile Include="ElementFinder\Matchers\RegexMatcher.cs" />
+    <Compile Include="ElementFinder\Matchers\StartsWithMatcher.cs" />
+    <Compile Include="ElementFinder\Matchers\StringMatcher.cs" />
+    <Compile Include="ElementFinder\Operators\AndOperator.cs" />
+    <Compile Include="ElementFinder\Operators\IBinaryOperator.cs" />
+    <Compile Include="ElementFinder\Operators\IOperator.cs" />
+    <Compile Include="ElementFinder\Matchers\Matcher.cs" />
+    <Compile Include="ElementFinder\Operators\IUnaryOperator.cs" />
+    <Compile Include="ElementFinder\Operators\NotOperator.cs" />
+    <Compile Include="Util\Operators.cs" />
+    <Compile Include="ElementFinder\Operators\OrOperator.cs" />
+    <Compile Include="ElementFinder\Query.cs" />
+    <Compile Include="ElementFinder\QueryBuilder.cs" />
+    <Compile Include="ElementFinder\StringPropertyCondition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIComponent.cs" />
+    <Compile Include="Util\ConditionHelper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
