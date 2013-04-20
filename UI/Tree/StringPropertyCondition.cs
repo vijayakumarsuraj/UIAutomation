@@ -1,15 +1,15 @@
 ﻿using System.Windows.Automation;
 
-using Automation.UI.ElementFinder.Matchers;
+using Automation.UI.Util;
 
-namespace Automation.UI.ElementFinder {
+namespace Automation.UI.Tree {
 
     /// <summary>
     ///     A special property condition that can partially match string properties.
     ///     Matching is done using string functions like StartsWith, EndsWith and Contains.
     ///     This also supports matching properties using regular expressions.
     /// </summary>
-    public class StringPropertyCondition : PropertyCondition {
+    internal class StringPropertyCondition : PropertyCondition {
 
         /// <summary>
         ///     New string property condition.
@@ -17,7 +17,7 @@ namespace Automation.UI.ElementFinder {
         /// <param name="property">The property to check.</param>
         /// <param name="value">The expected string value.</param>
         public StringPropertyCondition(AutomationProperty property, string value)
-            : this(property, value, Util.Matchers.Exact) {}
+            : this(property, value, Util.Matchers.Contains) {}
 
         /// <summary>
         ///     New string property condition.
@@ -41,7 +41,10 @@ namespace Automation.UI.ElementFinder {
         /// <param name="element">The element to check.</param>
         /// <returns>True if the automation element meets this condition's requirements.</returns>
         public bool IsMatch(AutomationElement element) {
-            return Matcher.IsMatch((string) Value, (string) element.GetCurrentPropertyValue(Property));
+            var actual = AutomationPropertyHelper.ToString(element.GetCurrentPropertyValue(Property));
+            var expected = AutomationPropertyHelper.ToString(Value);
+
+            return Matcher.IsMatch(actual, expected);
         }
 
     }

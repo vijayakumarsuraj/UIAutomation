@@ -1,18 +1,22 @@
-﻿namespace Automation.UI.ElementFinder.Matchers {
+﻿using System.Diagnostics;
+
+namespace Automation.UI.Tree.Matchers {
 
     /// <summary>
-    ///     A matcher that compares two strings to see if they are equal.
+    ///     A matcher that compares two strings to see if the actual value contains the expected value.
     /// </summary>
-    internal class ExactMatch : StringMatcher {
+    internal class ContainsMatcher : StringMatcher {
 
         /// <summary>
-        ///     Checks to see if the actual value is equal to the expected value.
+        ///     Checks to see if the actual value contains the specified expected value.
         /// </summary>
         /// <param name="actual">The actual value.</param>
         /// <param name="expected">The expected start value.</param>
         /// <returns>True if the values match.</returns>
         public override bool IsMatch(string actual, string expected) {
-            return actual.Equals(expected);
+            Trace.WriteLine("Checking '" + actual + "'" + this + "'" + expected + "'", "UIAutomation-ContainsMatcher");
+
+            return actual.Contains(expected);
         }
 
         /// <summary>
@@ -20,7 +24,7 @@
         /// </summary>
         /// <returns>The string representation.</returns>
         public override string ToString() {
-            return "=";
+            return "=Contains->";
         }
 
     }

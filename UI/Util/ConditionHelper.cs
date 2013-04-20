@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Automation;
 
-using Automation.UI.ElementFinder;
+using Automation.UI.Tree;
 
 namespace Automation.UI.Util {
 
@@ -35,9 +36,11 @@ namespace Automation.UI.Util {
                 return ((AndCondition) condition).GetConditions().All(inner => IsMeetsRequirements(inner, element));
             if (type == typeof (PropertyCondition)) {
                 var propertyCondition = (PropertyCondition) condition;
-                var actual = (string) element.GetCurrentPropertyValue(propertyCondition.Property);
-                var expected = (string) propertyCondition.Value;
-                return Matchers.Exact.IsMatch(actual, expected);
+                var actual = AutomationPropertyHelper.ToString(element.GetCurrentPropertyValue(propertyCondition.Property));
+                var expected = AutomationPropertyHelper.ToString(propertyCondition.Value);
+
+                Trace.WriteLine("Checking '" + actual + "'='" + expected + "'", "UIAutomation-ConditionHelper");
+                return actual.Equals(expected);
             }
             if (type == typeof (StringPropertyCondition))
                 return ((StringPropertyCondition) condition).IsMatch(element);
@@ -75,7 +78,7 @@ namespace Automation.UI.Util {
         /// <returns>The string representation.</returns>
         private static string ToString(PropertyCondition condition) {
             var parts = condition.Property.ProgrammaticName.Split('.');
-            var property = parts[parts.Length - 1];
+            var property = parts[parts.Length - 1].Replace("Property", "");
             var value = condition.Value.ToString();
 
             return property + "='" + value + "'";
@@ -87,8 +90,8 @@ namespace Automation.UI.Util {
         /// <param name="condition"></param>
         /// <returns></returns>
         private static string ToString(StringPropertyCondition condition) {
-            var propertyParts = condition.Property.ProgrammaticName.Split('.');
-            var property = propertyParts[propertyParts.Length - 1];
+            var parts = condition.Property.ProgrammaticName.Split('.');
+            var property = parts[parts.Length - 1].Replace("Property", "");
             var value = (string) condition.Value;
             var op = condition.Matcher.ToString();
 

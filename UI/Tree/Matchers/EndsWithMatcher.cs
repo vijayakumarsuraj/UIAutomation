@@ -1,20 +1,22 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
 
-namespace Automation.UI.ElementFinder.Matchers {
+namespace Automation.UI.Tree.Matchers {
 
     /// <summary>
-    ///     A matcher that compares two strings to see if the actual value matches the expected regular expression.
+    ///     A matcher that compares two strings to see if the actual value ends with the expected value.
     /// </summary>
-    internal class RegexMatcher : StringMatcher {
+    internal class EndsWithMatcher : StringMatcher {
 
         /// <summary>
-        ///     Checks to see if the actual value matches the specified expected regular expression.
+        ///     Checks to see if the actual value ends with the specified expected value.
         /// </summary>
         /// <param name="actual">The actual value.</param>
         /// <param name="expected">The expected start value.</param>
         /// <returns>True if the values match.</returns>
         public override bool IsMatch(string actual, string expected) {
-            return Regex.IsMatch(actual, expected);
+            Trace.WriteLine("Checking '" + actual + "'" + this + "'" + expected + "'", "UIAutomation-EndsWithMatcher");
+
+            return actual.EndsWith(expected);
         }
 
         /// <summary>
@@ -22,7 +24,7 @@ namespace Automation.UI.ElementFinder.Matchers {
         /// </summary>
         /// <returns>The string representation.</returns>
         public override string ToString() {
-            return "=~";
+            return "=EndsWith->";
         }
 
     }

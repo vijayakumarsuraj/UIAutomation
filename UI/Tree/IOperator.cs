@@ -1,4 +1,4 @@
-﻿namespace Automation.UI.ElementFinder.Operators {
+﻿namespace Automation.UI.Tree {
 
     /// <summary>
     ///     Base interface for operators.

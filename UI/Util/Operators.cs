@@ -1,4 +1,4 @@
-﻿using Automation.UI.ElementFinder.Operators;
+﻿using Automation.UI.Tree.Operators;
 
 namespace Automation.UI.Util {
 

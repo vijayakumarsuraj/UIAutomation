@@ -1,4 +1,5 @@
-﻿using Automation.UI.ElementFinder.Matchers;
+﻿using Automation.UI.Tree;
+using Automation.UI.Tree.Matchers;
 
 namespace Automation.UI.Util {
 
@@ -6,11 +7,6 @@ namespace Automation.UI.Util {
     ///     Supported matchers.
     /// </summary>
     public static class Matchers {
-
-        /// <summary>
-        ///     Gets a matcher that will check if the actual value "equals" the expected value.
-        /// </summary>
-        public static readonly Matcher<string> Exact = new ExactMatch();
 
         /// <summary>
         ///     Gets a matcher that will check if the actual value "starts with" the expected value.

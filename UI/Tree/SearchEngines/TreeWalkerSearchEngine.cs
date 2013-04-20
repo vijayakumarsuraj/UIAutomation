@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Windows.Automation;
 
 using Automation.UI.Util;
 
-namespace Automation.UI.ElementFinder.SearchEngines {
+namespace Automation.UI.Tree.SearchEngines {
 
     /// <summary>
     ///     Implementation of the search engine interface that uses a tree walker to find matching nodes.
@@ -63,17 +64,22 @@ namespace Automation.UI.ElementFinder.SearchEngines {
         /// <param name="timeout">The maximum amount of time to wait for the required element to become available.</param>
         /// <returns>The automation element.</returns>
         public override AutomationElement GetFirstResult(Query query, TimeSpan timeout) {
+            Debug.WriteLine("FirstResult - " + query, "UIAutomation-SearchEngine-TreeWalker");
+
             var root = query.Root;
             var scope = query.Scope;
             var conditions = query.Conditions;
             // The callback for return matched elements.
-            var returnMatchedChild = new WithElementCallback(child => ConditionHelper.IsMeetsRequirements(conditions, child) ? child : null);
+            var returnMatchedChild = new WithElementCallback(child => {
+                Trace.WriteLine("Checking " + AutomationElementHelper.ToString(child) + "...", "UIAutomation-SearchEngine-TreeWalker");
+                return ConditionHelper.IsMeetsRequirements(conditions, child) ? child : null;
+            });
             // Execute based on scope.
             switch (scope) {
                 case TreeScope.Children:
-                    return (AutomationElement) ExecuteWithChildren(root, returnMatchedChild);
+                    return (AutomationElement) ExecuteGetResult(() => ExecuteWithChildren(root, returnMatchedChild), timeout);
                 case TreeScope.Descendants:
-                    return (AutomationElement) ExecuteWithDescendants(root, returnMatchedChild);
+                    return (AutomationElement) ExecuteGetResult(() => ExecuteWithDescendants(root, returnMatchedChild), timeout);
                 default:
                     throw new NotSupportedException("Scope '" + scope + "' is not supported for TreeWalker search engines");
             }
@@ -86,12 +92,15 @@ namespace Automation.UI.ElementFinder.SearchEngines {
         /// <param name="timeout">The maximum amount of time to wait for at least one element to become available.</param>
         /// <returns>The collection of automation elements.</returns>
         public override IEnumerable GetAllResults(Query query, TimeSpan timeout) {
+            Debug.WriteLine("AllResults - " + query, "UIAutomation-SearchEngine-TreeWalker");
+
             var root = query.Root;
             var scope = query.Scope;
             var conditions = query.Conditions;
             var results = new ArrayList();
             // The callback for saving all matched elements.
             var saveMatchingChildren = new WithElementCallback(child => {
+                Trace.WriteLine("Checking " + AutomationElementHelper.ToString(child) + "...", "UIAutomation-SearchEngine-TreeWalker");
                 if (ConditionHelper.IsMeetsRequirements(conditions, child))
                     results.Add(child);
                 return null;

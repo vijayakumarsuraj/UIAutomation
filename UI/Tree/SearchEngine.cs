@@ -3,7 +3,7 @@ using System.Collections;
 using System.Threading;
 using System.Windows.Automation;
 
-namespace Automation.UI.ElementFinder.SearchEngines {
+namespace Automation.UI.Tree {
 
     /// <summary>
     ///     Base class for the query engines used. These are responsible for taking the conditions specified in a
@@ -53,35 +53,6 @@ namespace Automation.UI.ElementFinder.SearchEngines {
         /// <returns>The collection of automation elements.</returns>
         public IEnumerable GetAllResults(Query query) {
             return GetAllResults(query, DefaultTimeout);
-        }
-
-        /// <summary>
-        ///     Gets a query that is rooted at the first automation element found using the conditions specified
-        ///     in the query.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <returns>The query builder.</returns>
-        public QueryBuilder UsingFirstResult(Query query) {
-            var result = GetFirstResult(query);
-            if (result == null)
-                throw new InvalidOperationException("Cannot use result - No matching automation element was found");
-
-            return new QueryBuilder(result);
-        }
-
-        /// <summary>
-        ///     Gets a query that is rooted at the first automation element found using the conditions specified
-        ///     in the query.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="timeout">The maximum amount of time to wait for at least one element to become available.</param>
-        /// <returns>The query builder.</returns>
-        public QueryBuilder UsingFirstResult(Query query, TimeSpan timeout) {
-            var result = GetFirstResult(query, timeout);
-            if (result == null)
-                throw new InvalidOperationException("Cannot use result - No matching automation element was found");
-
-            return new QueryBuilder(result);
         }
 
         /// <summary>

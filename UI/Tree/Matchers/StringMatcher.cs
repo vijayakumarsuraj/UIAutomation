@@ -1,4 +1,4 @@
-﻿namespace Automation.UI.ElementFinder.Matchers {
+﻿namespace Automation.UI.Tree.Matchers {
 
     /// <summary>
     ///     Represents a matcher that works with string objects.

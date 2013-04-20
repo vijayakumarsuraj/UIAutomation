@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Windows.Automation;
 
-namespace Automation.UI.ElementFinder.SearchEngines {
+namespace Automation.UI.Tree.SearchEngines {
 
     /// <summary>
     ///     Standard search engine that will use UI Automation's built in methods.
@@ -17,6 +18,8 @@ namespace Automation.UI.ElementFinder.SearchEngines {
         /// <param name="timeout">The maximum amount of time to wait for the required element to become available.</param>
         /// <returns>The automation element.</returns>
         public override AutomationElement GetFirstResult(Query query, TimeSpan timeout) {
+            Debug.WriteLine("FirstResult - " + query, "UIAutomation-SearchEngine-Default");
+
             var root = query.Root;
             var scope = query.Scope;
             var conditions = query.Conditions;
@@ -31,6 +34,8 @@ namespace Automation.UI.ElementFinder.SearchEngines {
         /// <param name="timeout">The maximum amount of time to wait for at least one element to become available.</param>
         /// <returns>The collection of automation elements.</returns>
         public override IEnumerable GetAllResults(Query query, TimeSpan timeout) {
+            Debug.WriteLine("AllResults - " + query, "UIAutomation-SearchEngine-Default");
+
             var root = query.Root;
             var scope = query.Scope;
             var conditions = query.Conditions;

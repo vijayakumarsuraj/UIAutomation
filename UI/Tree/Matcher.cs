@@ -1,4 +1,4 @@
-﻿namespace Automation.UI.ElementFinder.Matchers {
+﻿namespace Automation.UI.Tree {
 
     /// <summary>
     ///     Represents a matcher that checks if an automation element matches a particular value.

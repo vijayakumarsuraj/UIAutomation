@@ -1,6 +1,6 @@
 ﻿using System.Windows.Automation;
 
-namespace Automation.UI.ElementFinder.Operators {
+namespace Automation.UI.Tree.Operators {
 
     /// <summary>
     ///     Represents a unary operator that applies a logical "not" to a condition.
