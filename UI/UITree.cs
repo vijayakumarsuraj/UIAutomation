@@ -16,11 +16,9 @@ namespace Automation.UI {
         /// <param name="root">The root element of the query.</param>
         /// <returns>The engine part of the query.</returns>
         public static QueryEnginePart Query(AutomationElement root) {
-            var query = new Query {Root = root};
-
-            return new QueryEnginePart(query);
+            return new QueryEnginePart(new Query(root));
         }
-
+        
     }
 
 }

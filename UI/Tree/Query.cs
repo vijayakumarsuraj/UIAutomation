@@ -13,9 +13,17 @@ namespace Automation.UI.Tree {
     public class Query {
 
         /// <summary>
+        ///     New query that will search relative to the specified element.
+        /// </summary>
+        /// <param name="root">The root element of the search.</param>
+        internal Query(AutomationElement root) {
+            Root = root;
+        }
+        
+        /// <summary>
         ///     The root element of this query. All searches will be relative to this element.
         /// </summary>
-        internal AutomationElement Root { get; set; }
+        internal AutomationElement Root { get; private set; }
 
         /// <summary>
         ///     The conditions of this query.
@@ -55,12 +63,12 @@ namespace Automation.UI.Tree {
         ///     Get the first result of executing this query. If no elements were found, throws an exception.
         /// </summary>
         /// <returns>The first match.</returns>
-        public AutomationElement FirstResult() {
+        public UIComponent FirstResult() {
             var result = Engine.GetFirstResult(this);
             if (result == null)
                 throw new ElementNotFoundException("No elements matched the specified query");
 
-            return result;
+            return new UIComponent(result);
         }
 
         /// <summary>
@@ -68,29 +76,12 @@ namespace Automation.UI.Tree {
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the requested element to become available.</param>
         /// <returns>The first match.</returns>
-        public AutomationElement FirstResult(TimeSpan timeout) {
+        public UIComponent FirstResult(TimeSpan timeout) {
             var result = Engine.GetFirstResult(this, timeout);
             if (result == null)
                 throw new ElementNotFoundException("No elements matched the specified query");
-
-            return result;
-        }
-
-        /// <summary>
-        ///     Get the first result of executing this query and use that result to start a new search.
-        /// </summary>
-        /// <returns>The engine part of the new query.</returns>
-        public QueryEnginePart FirstResultThenQuery() {
-            return UITree.Query(FirstResult());
-        }
-
-        /// <summary>
-        ///     Get the first result of executing this query and use that result to start a new search.
-        /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for the requested element to become available.</param>
-        /// <returns>The engine part of the new query.</returns>
-        public QueryEnginePart FirstResultThenQuery(TimeSpan timeout) {
-            return UITree.Query(FirstResult(timeout));
+            
+            return new UIComponent(result);
         }
 
     }

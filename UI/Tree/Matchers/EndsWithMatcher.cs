@@ -14,7 +14,7 @@ namespace Automation.UI.Tree.Matchers {
         /// <param name="expected">The expected start value.</param>
         /// <returns>True if the values match.</returns>
         public override bool IsMatch(string actual, string expected) {
-            Trace.WriteLine("Checking '" + actual + "'" + this + "'" + expected + "'", "UIAutomation-EndsWithMatcher");
+            WriteTrace(actual, expected);
 
             return actual.EndsWith(expected);
         }

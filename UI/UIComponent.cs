@@ -1,20 +1,21 @@
 ﻿using System.Windows.Automation;
 
+using Automation.UI.Tree;
+using Automation.UI.Tree.QueryParts;
+
 namespace Automation.UI {
 
     /// <summary>
     ///     The base class for all UI elements.
     ///     This class provides a convenient wrapper for interacting with the UI automation elements.
     /// </summary>
-    public abstract class UIComponent {
+    public class UIComponent {
 
         /// <summary>
         ///     New UI component.
         /// </summary>
-        /// <param name="parent">The parent component.</param>
         /// <param name="element">The underlying element wrapped by this component.</param>
-        protected UIComponent(UIComponent parent, AutomationElement element) {
-            Parent = parent;
+        public UIComponent(AutomationElement element) {
             Element = element;
         }
 
@@ -24,10 +25,12 @@ namespace Automation.UI {
         public AutomationElement Element { get; protected set; }
 
         /// <summary>
-        ///     The UI component that is the parent of this component in the UI tree.
-        ///     Will be nil for the root element (i.e. and application's main window).
+        ///     Construct a new query for searching under this component.
         /// </summary>
-        protected UIComponent Parent { get; set; }
+        /// <returns>The engine part of the query.</returns>
+        public QueryEnginePart Query() {
+            return new QueryEnginePart(new Query(Element));
+        }
 
     }
 

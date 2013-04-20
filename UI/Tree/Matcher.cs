@@ -18,6 +18,13 @@
         /// <returns>True if the values match.</returns>
         public abstract bool IsMatch(T actual, T expected);
 
+        /// <summary>
+        ///     Writes a trace message.
+        /// </summary>
+        /// <param name="actual">The actual value.</param>
+        /// <param name="expected">The expected start value.</param>
+        protected abstract void WriteTrace(string actual, string expected);
+
     }
 
 }
