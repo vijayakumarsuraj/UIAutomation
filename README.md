@@ -46,3 +46,17 @@ Using the query builder
             .Select().FirstResult()
             // Return the first result of query 2.
             .Element;
+
+
+### Executing commands with automation patterns
+
+    var root = AutomationElement.RootElement;
+    var window = UITree.Query(root).UsingTreeWalkerEngine()
+        // Query 1.
+        .FindChildren().Where()
+        .NameContains("Microsoft Visual Studio").And().TypeIs(ControlType.Window)
+        .Select().FirstResult();
+
+    // Execute using the 'Window' pattern.
+    window.Execute<WindowPattern>(p => p.SetWindowVisualState(WindowVisualState.Minimized));
+
