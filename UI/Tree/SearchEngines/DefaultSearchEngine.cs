@@ -41,7 +41,7 @@ namespace Automation.UI.Tree.SearchEngines {
             var conditions = query.Conditions;
             return (IEnumerable) ExecuteGetResult(() => {
                 var children = root.FindAll(scope, conditions);
-                return children.Count > 0 ? children.GetEnumerator() : null;
+                return children.Count > 0 ? children : null;
             }, timeout);
         }
 

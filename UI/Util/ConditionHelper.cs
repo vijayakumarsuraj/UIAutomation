@@ -26,24 +26,24 @@ namespace Automation.UI.Util {
             if (condition == Condition.FalseCondition)
                 // Always returns false.
                 return false;
-            if (type == typeof (NotCondition))
+            if (type == typeof(NotCondition))
                 // Return the negation of the inner condition.
                 return !IsMeetsRequirements(((NotCondition) condition).Condition, element);
-            if (type == typeof (OrCondition))
+            if (type == typeof(OrCondition))
                 // Return true if any of the inner conditions are true.
                 return ((OrCondition) condition).GetConditions().Any(inner => IsMeetsRequirements(inner, element));
-            if (type == typeof (AndCondition))
+            if (type == typeof(AndCondition))
                 return ((AndCondition) condition).GetConditions().All(inner => IsMeetsRequirements(inner, element));
-            if (type == typeof (PropertyCondition)) {
-                var propertyCondition = (PropertyCondition) condition;
-                var actual = AutomationPropertyHelper.ToString(element.GetCurrentPropertyValue(propertyCondition.Property));
-                var expected = AutomationPropertyHelper.ToString(propertyCondition.Value);
-
-                Trace.WriteLine("Checking '" + actual + "'='" + expected + "'", "UIAutomation-ConditionHelper");
-                return actual.Equals(expected);
-            }
-            if (type == typeof (StringPropertyCondition))
+            if (type == typeof(StringPropertyCondition))
                 return ((StringPropertyCondition) condition).IsMatch(element);
+            if (type == typeof(PropertyCondition)) {
+                var propertyCondition = (PropertyCondition) condition;
+                var actual = element.GetCurrentPropertyValue(propertyCondition.Property);
+                var expected = propertyCondition.Value;
+
+                Trace.WriteLine("Checking '" + AutomationPropertyHelper.ToString(actual) + "'='" + AutomationPropertyHelper.ToString(expected) + "'", "UIAutomation-ConditionHelper");
+                return AutomationPropertyHelper.Equals(actual, expected);
+            }
             throw new NotSupportedException("Condition '" + type + "' is not supported");
         }
 
@@ -58,16 +58,16 @@ namespace Automation.UI.Util {
                 return "TRUE";
             if (condition == Condition.FalseCondition)
                 return "FALSE";
-            if (type == typeof (NotCondition))
+            if (type == typeof(NotCondition))
                 return "NOT " + ToString(((NotCondition) condition).Condition);
-            if (type == typeof (OrCondition))
+            if (type == typeof(OrCondition))
                 return string.Join(" OR ", ((OrCondition) condition).GetConditions().Select(ToString).ToList());
-            if (type == typeof (AndCondition))
+            if (type == typeof(AndCondition))
                 return string.Join(" AND ", ((AndCondition) condition).GetConditions().Select(ToString).ToList());
-            if (type == typeof (PropertyCondition))
-                return ToString((PropertyCondition) condition);
-            if (type == typeof (StringPropertyCondition))
+            if (type == typeof(StringPropertyCondition))
                 return ToString((StringPropertyCondition) condition);
+            if (type == typeof(PropertyCondition))
+                return ToString((PropertyCondition) condition);
             throw new NotSupportedException("Condition '" + type + "' not supported");
         }
 
@@ -77,8 +77,7 @@ namespace Automation.UI.Util {
         /// <param name="condition">The condition.</param>
         /// <returns>The string representation.</returns>
         private static string ToString(PropertyCondition condition) {
-            var parts = condition.Property.ProgrammaticName.Split('.');
-            var property = parts[parts.Length - 1].Replace("Property", "");
+            var property = AutomationPropertyHelper.ProgrammaticName(condition.Property);
             var value = condition.Value.ToString();
 
             return property + "='" + value + "'";
@@ -90,8 +89,7 @@ namespace Automation.UI.Util {
         /// <param name="condition"></param>
         /// <returns></returns>
         private static string ToString(StringPropertyCondition condition) {
-            var parts = condition.Property.ProgrammaticName.Split('.');
-            var property = parts[parts.Length - 1].Replace("Property", "");
+            var property = AutomationPropertyHelper.ProgrammaticName(condition.Property);
             var value = (string) condition.Value;
             var op = condition.Matcher.ToString();
 
