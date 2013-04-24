@@ -48,6 +48,11 @@ Using the query builder
             .Element;
 
 
+
+Using UI Automation's patterns
+------------------------------
+
+
 ### Executing commands with automation patterns
 
     var root = AutomationElement.RootElement;
