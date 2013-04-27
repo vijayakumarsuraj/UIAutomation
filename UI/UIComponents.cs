@@ -18,12 +18,19 @@ namespace Automation.UI {
             // Wrap each element in a UI component.
             foreach (AutomationElement element in elements)
                 Components.Add(new UIComponent(element));
+
+            Count = Components.Count;
         }
 
         /// <summary>
         ///     The components that make up this collection.
         /// </summary>
         private List<UIComponent> Components { get; set; }
+
+        /// <summary>
+        ///     Get the number of components in this collection.
+        /// </summary>
+        public int Count { get; set; }
 
         /// <summary>
         ///     Get an enumerator for this collection.

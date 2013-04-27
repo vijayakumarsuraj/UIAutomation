@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Automation;
+﻿using System.Windows.Automation;
 
 using Automation.UI.Tree.Operators;
 using Automation.UI.Tree.SearchEngines;
@@ -74,6 +73,20 @@ namespace Automation.UI.Tree.QueryParts {
 
         #endregion
 
+        #region Unary operators
+
+        /// <summary>
+        ///     Sets the active unary operator to a logical "not".
+        /// </summary>
+        /// <returns>This condition part.</returns>
+        public QueryConditionPart Not() {
+            SetUnaryOperator(Util.Operators.Not);
+
+            return this;
+        }
+
+        #endregion
+
         #region Miscellaneous
 
         /// <summary>
@@ -101,7 +114,7 @@ namespace Automation.UI.Tree.QueryParts {
         /// <param name="op">The new operator.</param>
         private void SetBinaryOperator(IBinaryOperator op) {
             if (BinaryOperator != null)
-                throw new InvalidOperationException("Cannot set operator - Another binary operator is already active");
+                throw new QueryConstructionException("Cannot set operator - Another binary operator is already active");
 
             BinaryOperator = op;
         }
@@ -112,7 +125,7 @@ namespace Automation.UI.Tree.QueryParts {
         /// <param name="op">The new operator.</param>
         private void SetUnaryOperator(IUnaryOperator op) {
             if (UnaryOperator != null)
-                throw new InvalidOperationException("Cannot set operator - Another unary operator is already active");
+                throw new QueryConstructionException("Cannot set operator - Another unary operator is already active");
 
             UnaryOperator = op;
         }
@@ -233,7 +246,7 @@ namespace Automation.UI.Tree.QueryParts {
             /// <returns>THe operator part of the query.</returns>
             private QueryOperatorPart ApplyMatcher(string value, Matcher<string> matcher) {
                 if (!(Query.Engine is TreeWalkerSearchEngine))
-                    throw new InvalidOperationException("Cannot apply matcher - Search engine is not a TreeWalker");
+                    throw new QueryConstructionException("Cannot apply matcher - Search engine is not a TreeWalker");
 
                 ConditionPart.ApplyCondition(new StringPropertyCondition(Property, value, matcher));
                 return ConditionPart.OperatorPart;
@@ -284,28 +297,6 @@ namespace Automation.UI.Tree.QueryParts {
                 return ConditionPart;
             }
 
-            /// <summary>
-            ///     Sets the active unary operator to a logical "not" and the active binary operator to a logical "and".
-            /// </summary>
-            /// <returns>This condition part.</returns>
-            public QueryConditionPart AndNot() {
-                ConditionPart.SetUnaryOperator(Util.Operators.Not);
-                ConditionPart.SetBinaryOperator(Util.Operators.And);
-
-                return ConditionPart;
-            }
-
-            /// <summary>
-            ///     Sets the active unary operator to a logical "not" and the active binary operator to a logical "or".
-            /// </summary>
-            /// <returns>This condition part.</returns>
-            public QueryConditionPart OrNot() {
-                ConditionPart.SetUnaryOperator(Util.Operators.Not);
-                ConditionPart.SetBinaryOperator(Util.Operators.Or);
-
-                return ConditionPart;
-            }
-
             #endregion
 
             #region Select methods
@@ -316,7 +307,7 @@ namespace Automation.UI.Tree.QueryParts {
             /// <returns>The query.</returns>
             public Query Select() {
                 if (Query.Conditions == null)
-                    throw new InvalidOperationException("Cannot select - No conditions have been specified");
+                    throw new QueryConstructionException("Cannot select - No conditions have been specified");
 
                 return Query;
             }
