@@ -63,9 +63,16 @@ namespace Automation.UI.Examples {
                 .FindChildren().Where()
                 .NameContains("Microsoft Visual Studio").And().TypeIs(ControlType.Window)
                 .Select().FirstResult();
-
             // Execute using the 'Window' pattern.
             window.Execute<WindowPattern>(p => p.SetWindowVisualState(WindowVisualState.Minimized));
+
+            var windows = UITree.Query(root).UsingTreeWalkerEngine()
+                // Query 2.
+                .FindChildren().Where()
+                .NameContains("Microsoft Visual Studio").And().TypeIs(ControlType.Window)
+                .Select().AllResults();
+            // Execute for all matched components using the 'Window' pattern.
+            windows.Execute<WindowPattern>(p => p.SetWindowVisualState(WindowVisualState.Minimized));
         }
 
     }

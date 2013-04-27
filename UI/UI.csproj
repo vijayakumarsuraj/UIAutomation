@@ -45,6 +45,7 @@
     <Compile Include="Tree\SearchEngines\DefaultSearchEngine.cs" />
     <Compile Include="Tree\SearchEngine.cs" />
     <Compile Include="Tree\QueryPart.cs" />
+    <Compile Include="UIComponents.cs" />
     <Compile Include="UIException.cs" />
     <Compile Include="UITree.cs" />
     <Compile Include="Util\AutomationElementHelper.cs" />

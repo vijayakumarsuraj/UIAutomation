@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Windows.Automation;
 
 using Automation.UI.Util;
@@ -53,9 +52,9 @@ namespace Automation.UI.Tree {
         /// <summary>
         ///     Gets all the results of executing this query.
         /// </summary>
-        /// <returns>A collection containing all matched elements.</returns>
-        public IEnumerable AllResults() {
-            return Engine.GetAllResults(this);
+        /// <returns>A collection containing all matched components.</returns>
+        public UIComponents AllResults() {
+            return new UIComponents(Engine.GetAllResults(this));
         }
 
         /// <summary>
