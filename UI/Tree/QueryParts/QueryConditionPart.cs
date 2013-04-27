@@ -36,112 +36,39 @@ namespace Automation.UI.Tree.QueryParts {
         /// </summary>
         private IUnaryOperator UnaryOperator { get; set; }
 
-        #region Search criteria
+        #region Searchable properties
 
         /// <summary>
-        ///     Adds a property condition.
+        ///     Search using the automation id property.
         /// </summary>
-        /// <param name="property">The property to check.</param>
-        /// <param name="value">The expected value.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart Is(AutomationProperty property, object value) {
-            ApplyCondition(new PropertyCondition(property, value));
-
-            return OperatorPart;
+        /// <returns>The matcher part of the query.</returns>
+        public QueryMatcherPart Id() {
+            return Property(AutomationElement.AutomationIdProperty);
         }
 
         /// <summary>
-        ///     Adds a starts with condition.
+        ///     Search using the name property.
         /// </summary>
-        /// <param name="property">The property to check.</param>
-        /// <param name="value">The expected value.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart StartsWith(AutomationProperty property, string value) {
-            ApplyCondition(new StringPropertyCondition(property, value, Util.Matchers.StartsWith));
-
-            return OperatorPart;
+        /// <returns>The matcher part of the query.</returns>
+        public QueryMatcherPart Name() {
+            return Property(AutomationElement.NameProperty);
         }
 
         /// <summary>
-        ///     Adds an ends with condition.
+        ///     Search using the name property.
         /// </summary>
-        /// <param name="property">The property to check.</param>
-        /// <param name="value">The expected value.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart EndsWith(AutomationProperty property, string value) {
-            ApplyCondition(new StringPropertyCondition(property, value, Util.Matchers.EndsWith));
-
-            return OperatorPart;
+        /// <returns>The matcher part of the query.</returns>
+        public QueryMatcherPart Type() {
+            return Property(AutomationElement.ControlTypeProperty);
         }
 
         /// <summary>
-        ///     Adds a contains condition.
+        ///     Search using an arbitrary property.
         /// </summary>
-        /// <param name="property">The property to check.</param>
-        /// <param name="value">The expected value.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart Contains(AutomationProperty property, string value) {
-            ApplyCondition(new StringPropertyCondition(property, value, Util.Matchers.Contains));
-
-            return OperatorPart;
-        }
-
-        #endregion
-
-        #region Search shortcuts
-
-        /// <summary>
-        ///     Adds an automation id is condition.
-        /// </summary>
-        /// <param name="id">The expected automation id.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart IdIs(string id) {
-            return Is(AutomationElement.AutomationIdProperty, id);
-        }
-
-        /// <summary>
-        ///     Adds a name is condition.
-        /// </summary>
-        /// <param name="name">The expected name.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart NameIs(string name) {
-            return Is(AutomationElement.NameProperty, name);
-        }
-
-        /// <summary>
-        ///     Adds a name starts with condition.
-        /// </summary>
-        /// <param name="name">The expected name.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart NameStartsWith(string name) {
-            return StartsWith(AutomationElement.NameProperty, name);
-        }
-
-        /// <summary>
-        ///     Adds a name ends with condition.
-        /// </summary>
-        /// <param name="name">The expected name.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart NameEndsWith(string name) {
-            return EndsWith(AutomationElement.NameProperty, name);
-        }
-
-        /// <summary>
-        ///     Adds a name contains condition.
-        /// </summary>
-        /// <param name="name">The expected name.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart NameContains(string name) {
-            return Contains(AutomationElement.NameProperty, name);
-        }
-
-        /// <summary>
-        ///     Adds a control type is condition.
-        /// </summary>
-        /// <param name="type">The expected control type.</param>
-        /// <returns>The operator part of the query.</returns>
-        public QueryOperatorPart TypeIs(ControlType type) {
-            return Is(AutomationElement.ControlTypeProperty, type);
+        /// <param name="property">The property to match.</param>
+        /// <returns>The matcher part of the query.</returns>
+        public QueryMatcherPart Property(AutomationProperty property) {
+            return new QueryMatcherPart(property, this);
         }
 
         #endregion
@@ -208,18 +135,128 @@ namespace Automation.UI.Tree.QueryParts {
         #endregion
 
         /// <summary>
-        ///     Represents the operator part of the conditions of a query.
+        ///     Represents a part of the conditions of a query.
         /// </summary>
-        public class QueryOperatorPart : QueryPart {
+        public abstract class QueryConditionPartPart : QueryPart {
 
             /// <summary>
             ///     New query operator part.
             /// </summary>
             /// <param name="part">The condition part that is wrapping this.</param>
-            internal QueryOperatorPart(QueryConditionPart part)
+            protected internal QueryConditionPartPart(QueryConditionPart part)
                 : base(part.Query) {
                 ConditionPart = part;
             }
+
+            /// <summary>
+            ///     The condition part that is wrapping this query part.
+            /// </summary>
+            protected QueryConditionPart ConditionPart { get; private set; }
+
+        }
+
+        /// <summary>
+        ///     Represents the matcher part of the conditions of a query.
+        /// </summary>
+        public class QueryMatcherPart : QueryConditionPartPart {
+
+            /// <summary>
+            ///     New query matcher part.
+            /// </summary>
+            /// <param name="property">The property that will be matched.</param>
+            /// <param name="part">The condition part that is wrapping this.</param>
+            internal QueryMatcherPart(AutomationProperty property, QueryConditionPart part)
+                : base(part) {
+                Property = property;
+            }
+
+            /// <summary>
+            ///     The property that this matcher will check.
+            /// </summary>
+            private AutomationProperty Property { get; set; }
+
+            #region Matchers
+
+            /// <summary>
+            ///     Adds a property condition.
+            /// </summary>
+            /// <param name="value">The expected value.</param>
+            /// <returns>The operator part of the query.</returns>
+            public QueryOperatorPart Is(object value) {
+                return ApplyMatcher(value);
+            }
+
+            /// <summary>
+            ///     Adds a starts with condition.
+            /// </summary>
+            /// <param name="value">The expected value.</param>
+            /// <returns>The operator part of the query.</returns>
+            public QueryOperatorPart StartsWith(string value) {
+                return ApplyMatcher(value, Util.Matchers.StartsWith);
+            }
+
+            /// <summary>
+            ///     Adds an ends with condition.
+            /// </summary>
+            /// <param name="value">The expected value.</param>
+            /// <returns>The operator part of the query.</returns>
+            public QueryOperatorPart EndsWith(string value) {
+                return ApplyMatcher(value, Util.Matchers.EndsWith);
+            }
+
+            /// <summary>
+            ///     Adds a contains condition.
+            /// </summary>
+            /// <param name="value">The expected value.</param>
+            /// <returns>The operator part of the query.</returns>
+            public QueryOperatorPart Contains(string value) {
+                return ApplyMatcher(value, Util.Matchers.Contains);
+            }
+
+            /// <summary>
+            ///     Adds a regex condition.
+            /// </summary>
+            /// <param name="pattern">The regeular expression to match.</param>
+            /// <returns>The operator part of the query.</returns>
+            public QueryOperatorPart Matches(string pattern) {
+                return ApplyMatcher(pattern, Util.Matchers.Regex);
+            }
+
+            #endregion
+
+            /// <summary>
+            ///     Applies the required string property condition in the condition part of the query.
+            /// </summary>
+            /// <param name="value">The expected value for the condition.</param>
+            /// <param name="matcher">The matcher to use to check the condition.</param>
+            /// <returns>THe operator part of the query.</returns>
+            private QueryOperatorPart ApplyMatcher(string value, Matcher<string> matcher) {
+                ConditionPart.ApplyCondition(new StringPropertyCondition(Property, value, matcher));
+                return ConditionPart.OperatorPart;
+            }
+
+            /// <summary>
+            ///     Applies the required property condition in the condition part of the query.
+            /// </summary>
+            /// <param name="value">The expected value for the condition.</param>
+            /// <returns>THe operator part of the query.</returns>
+            private QueryOperatorPart ApplyMatcher(object value) {
+                ConditionPart.ApplyCondition(new PropertyCondition(Property, value));
+                return ConditionPart.OperatorPart;
+            }
+
+        }
+
+        /// <summary>
+        ///     Represents the operator part of the conditions of a query.
+        /// </summary>
+        public class QueryOperatorPart : QueryConditionPartPart {
+
+            /// <summary>
+            ///     New query operator part.
+            /// </summary>
+            /// <param name="part">The condition part that is wrapping this.</param>
+            internal QueryOperatorPart(QueryConditionPart part) : base(part) {}
 
             #region Operators
 
@@ -281,11 +318,6 @@ namespace Automation.UI.Tree.QueryParts {
             }
 
             #endregion
-
-            /// <summary>
-            ///     The condition part that is wrapping this operator part.
-            /// </summary>
-            private QueryConditionPart ConditionPart { get; set; }
 
         }
 
