@@ -36,8 +36,10 @@ namespace Automation.UI.Util {
                 // Return true if all of the inner conditions are true.
                 return ((AndCondition) condition).GetConditions().All(inner => IsMeetsRequirements(inner, element));
             if (type == typeof(StringPropertyCondition))
+                // Return true if the string property condition matches.
                 return ((StringPropertyCondition) condition).IsMatch(element);
             if (type == typeof(PropertyCondition)) {
+                // Return true if the property condition matches.
                 var propertyCondition = (PropertyCondition) condition;
                 var actual = element.GetCurrentPropertyValue(propertyCondition.Property);
                 var expected = propertyCondition.Value;
@@ -45,6 +47,7 @@ namespace Automation.UI.Util {
                 Trace.WriteLine("Checking '" + AutomationPropertyHelper.ToString(actual) + "'='" + AutomationPropertyHelper.ToString(expected) + "'", "UIAutomation-ConditionHelper");
                 return AutomationPropertyHelper.Equals(actual, expected);
             }
+            // Don't know how to match any other conditions.
             throw new NotSupportedException("Condition '" + type + "' is not supported");
         }
 
@@ -69,6 +72,7 @@ namespace Automation.UI.Util {
                 return ToString((StringPropertyCondition) condition);
             if (type == typeof(PropertyCondition))
                 return ToString((PropertyCondition) condition);
+            // Don't know how to print any other conditions.
             throw new NotSupportedException("Condition '" + type + "' not supported");
         }
 

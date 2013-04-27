@@ -39,12 +39,18 @@ namespace Automation.UI.Tree {
         /// <param name="element">The element to check.</param>
         /// <returns>True if the automation element meets this condition's requirements.</returns>
         public bool IsMatch(AutomationElement element) {
-            var actual = (string) element.GetCurrentPropertyValue(Property);
+            var actualObj = element.GetCurrentPropertyValue(Property);
+            // If the element's current property value is null or not a string object, return false.
+            if (actualObj == null || !(actualObj is string))
+                return false;
+            // Otherwise cast to strings...
+            var actual = (string) actualObj;
             var expected = (string) Value;
-
+            // ... and compare them.
             return Matcher.IsMatch(actual, expected);
         }
 
     }
 
 }
+

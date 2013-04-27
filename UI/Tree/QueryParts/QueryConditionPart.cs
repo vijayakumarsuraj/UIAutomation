@@ -2,6 +2,7 @@
 using System.Windows.Automation;
 
 using Automation.UI.Tree.Operators;
+using Automation.UI.Tree.SearchEngines;
 
 namespace Automation.UI.Tree.QueryParts {
 
@@ -231,6 +232,9 @@ namespace Automation.UI.Tree.QueryParts {
             /// <param name="matcher">The matcher to use to check the condition.</param>
             /// <returns>THe operator part of the query.</returns>
             private QueryOperatorPart ApplyMatcher(string value, Matcher<string> matcher) {
+                if (!(Query.Engine is TreeWalkerSearchEngine))
+                    throw new InvalidOperationException("Cannot apply matcher - Search engine is not a TreeWalker");
+
                 ConditionPart.ApplyCondition(new StringPropertyCondition(Property, value, matcher));
                 return ConditionPart.OperatorPart;
             }
@@ -318,7 +322,6 @@ namespace Automation.UI.Tree.QueryParts {
             }
 
             #endregion
-
         }
 
     }
