@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace Automation.UI.Tree.Matchers {
+﻿namespace Automation.UI.Tree.Matchers {
 
     /// <summary>
     ///     A matcher that compares two strings to see if the actual value contains the expected value.

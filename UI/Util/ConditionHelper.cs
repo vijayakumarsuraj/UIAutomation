@@ -33,6 +33,7 @@ namespace Automation.UI.Util {
                 // Return true if any of the inner conditions are true.
                 return ((OrCondition) condition).GetConditions().Any(inner => IsMeetsRequirements(inner, element));
             if (type == typeof(AndCondition))
+                // Return true if all of the inner conditions are true.
                 return ((AndCondition) condition).GetConditions().All(inner => IsMeetsRequirements(inner, element));
             if (type == typeof(StringPropertyCondition))
                 return ((StringPropertyCondition) condition).IsMatch(element);

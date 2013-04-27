@@ -14,7 +14,7 @@ namespace Automation.UI.Util {
         /// <param name="property1">The first property.</param>
         /// <param name="property2">The second property.</param>
         /// <returns>True if the values are equal, false otherwise.</returns>
-        public static bool Equals(object property1, object property2) {
+        public new static bool Equals(object property1, object property2) {
             // If the type of the property is ControlType, compare the ids instead.
             var type1 = property1.GetType();
             if (type1 == typeof(ControlType)) property1 = ((ControlType) property1).Id;

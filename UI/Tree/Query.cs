@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Windows.Automation;
 
-using Automation.UI.Tree.QueryParts;
 using Automation.UI.Util;
 
 namespace Automation.UI.Tree {
@@ -19,7 +18,7 @@ namespace Automation.UI.Tree {
         internal Query(AutomationElement root) {
             Root = root;
         }
-        
+
         /// <summary>
         ///     The root element of this query. All searches will be relative to this element.
         /// </summary>
@@ -80,7 +79,7 @@ namespace Automation.UI.Tree {
             var result = Engine.GetFirstResult(this, timeout);
             if (result == null)
                 throw new ElementNotFoundException("No elements matched the specified query");
-            
+
             return new UIComponent(result);
         }
 

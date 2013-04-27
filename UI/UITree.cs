@@ -18,7 +18,7 @@ namespace Automation.UI {
         public static QueryEnginePart Query(AutomationElement root) {
             return new QueryEnginePart(new Query(root));
         }
-        
+
     }
 
 }

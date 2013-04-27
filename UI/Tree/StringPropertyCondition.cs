@@ -1,7 +1,5 @@
 ﻿using System.Windows.Automation;
 
-using Automation.UI.Util;
-
 namespace Automation.UI.Tree {
 
     /// <summary>
@@ -17,8 +15,7 @@ namespace Automation.UI.Tree {
         /// <param name="property">The property to check.</param>
         /// <param name="value">The expected string value.</param>
         public StringPropertyCondition(AutomationProperty property, string value)
-            : this(property, value, Util.Matchers.Contains) {
-        }
+            : this(property, value, Util.Matchers.Contains) {}
 
         /// <summary>
         ///     New string property condition.
