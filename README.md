@@ -12,20 +12,22 @@ Using the query builder
 #### Using separate queries
 
     var root = AutomationElement.RootElement;
-    var window = UITree.Query(root)
+    var window = UITree.Query(root).UsingTreeWalkerEngine()
         // Query 1.
-        .UsingTreeWalkerEngine().FindChildren().Where()
-        .NameContains("Microsoft Visual Studio").And().TypeIs(ControlType.Window)
+        .FindChildren().Where()
+            .NameContains("Microsoft Visual Studio")
+            .And()
+            .TypeIs(ControlType.Window)
         .Select().FirstResult()
-        // Return the first result of query 1.
+        // Get the underlying automation element of query 1.
         .Element;
 
-    var titleBar = UITree.Query(window)
+    var titleBar = UITree.Query(window).UsingDefaultEngine()
         // Query 2
-        .UsingTreeWalkerEngine().FindChildren().Where()
-        .TypeIs(ControlType.TitleBar)
+        .FindChildren().Where()
+            .TypeIs(ControlType.TitleBar)
         .Select().FirstResult()
-        // Return the first result of query 2.
+        // Get the underlying automation element of query 2.
         .Element;
 
 
@@ -36,16 +38,18 @@ Using the query builder
         .Query(root).UsingTreeWalkerEngine()
         // Query 1.
         .FindChildren().Where()
-        .NameContains("Microsoft Visual Studio").And().TypeIs(ControlType.Window)
+            .NameContains("Microsoft Visual Studio")
+            .And()
+            .TypeIs(ControlType.Window)
         .Select().FirstResult()
-        // Continue with another query using the first result of query 1.
-        .Query().UsingTreeWalkerEngine()
+            // Continue with another query using the first result of query 1.
+            .Query().UsingDefaultEngine()
             // Query 2
             .FindChildren().Where()
-            .TypeIs(ControlType.TitleBar)
+                .TypeIs(ControlType.TitleBar)
             .Select().FirstResult()
-            // Return the first result of query 2.
-            .Element;
+        // Get the underlying automation element of query 2.
+        .Element;
 
 
 
