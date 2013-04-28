@@ -1,7 +1,6 @@
 ﻿using System.Windows.Automation;
 
 using Automation.UI.Tree.Operators;
-using Automation.UI.Tree.SearchEngines;
 
 namespace Automation.UI.Tree.QueryParts {
 
@@ -16,15 +15,9 @@ namespace Automation.UI.Tree.QueryParts {
         /// <param name="query">The query that is being built.</param>
         internal QueryConditionPart(Query query)
             : base(query) {
-            OperatorPart = new QueryOperatorPart(this);
             UnaryOperator = null;
             BinaryOperator = null;
         }
-
-        /// <summary>
-        ///     The operator part of the conditions.
-        /// </summary>
-        private QueryOperatorPart OperatorPart { get; set; }
 
         /// <summary>
         ///     The active binary operator.
@@ -88,6 +81,44 @@ namespace Automation.UI.Tree.QueryParts {
         #endregion
 
         #region Miscellaneous
+        
+        /// <summary>
+        ///     Updates the active binary operator.
+        /// </summary>
+        /// <param name="op">The new operator.</param>
+        internal void SetBinaryOperator(IBinaryOperator op) {
+            if (BinaryOperator != null)
+                throw new QueryConstructionException("Cannot set operator - Another binary operator is already active");
+
+            BinaryOperator = op;
+        }
+
+        /// <summary>
+        ///     Updates the active unary operator.
+        /// </summary>
+        /// <param name="op">The new operator.</param>
+        internal void SetUnaryOperator(IUnaryOperator op) {
+            if (UnaryOperator != null)
+                throw new QueryConstructionException("Cannot set operator - Another unary operator is already active");
+
+            UnaryOperator = op;
+        }
+
+        /// <summary>
+        ///     Applies the specified property condition to this query.
+        /// </summary>
+        /// <param name="condition">The condition to apply.</param>
+        internal void ApplyCondition(Condition condition) {
+            // Apply the active unary condition.
+            condition = ApplyUnaryOperator(condition);
+            // If the current active condition is null, not need to apply the binary operator.
+            // If it isn't null, apply the binary operator.
+            if (Query.Conditions == null) Query.Conditions = condition;
+            else Query.Conditions = JoinWithBinaryOperator(Query.Conditions, condition);
+            // Reset the operators for the next condition.
+            UnaryOperator = null;
+            BinaryOperator = null;
+        }
 
         /// <summary>
         ///     Applies the active unary operator to the specified condition.
@@ -106,44 +137,6 @@ namespace Automation.UI.Tree.QueryParts {
         /// <returns>The new condition after the operator is applied.</returns>
         private Condition JoinWithBinaryOperator(Condition left, Condition right) {
             return BinaryOperator == null ? Util.Operators.And.Join(left, right) : BinaryOperator.Join(left, right);
-        }
-
-        /// <summary>
-        ///     Updates the active binary operator.
-        /// </summary>
-        /// <param name="op">The new operator.</param>
-        private void SetBinaryOperator(IBinaryOperator op) {
-            if (BinaryOperator != null)
-                throw new QueryConstructionException("Cannot set operator - Another binary operator is already active");
-
-            BinaryOperator = op;
-        }
-
-        /// <summary>
-        ///     Updates the active unary operator.
-        /// </summary>
-        /// <param name="op">The new operator.</param>
-        private void SetUnaryOperator(IUnaryOperator op) {
-            if (UnaryOperator != null)
-                throw new QueryConstructionException("Cannot set operator - Another unary operator is already active");
-
-            UnaryOperator = op;
-        }
-
-        /// <summary>
-        ///     Applies the specified property condition to this query.
-        /// </summary>
-        /// <param name="condition">The condition to apply.</param>
-        private void ApplyCondition(Condition condition) {
-            // Apply the active unary condition.
-            condition = ApplyUnaryOperator(condition);
-            // If the current active condition is null, not need to apply the binary operator.
-            // If it isn't null, apply the binary operator.
-            if (Query.Conditions == null) Query.Conditions = condition;
-            else Query.Conditions = JoinWithBinaryOperator(Query.Conditions, condition);
-            // Reset the operators for the next condition.
-            UnaryOperator = null;
-            BinaryOperator = null;
         }
 
         #endregion
@@ -167,152 +160,6 @@ namespace Automation.UI.Tree.QueryParts {
             /// </summary>
             protected QueryConditionPart ConditionPart { get; private set; }
 
-        }
-
-        /// <summary>
-        ///     Represents the matcher part of the conditions of a query.
-        /// </summary>
-        public class QueryMatcherPart : QueryConditionPartPart {
-
-            /// <summary>
-            ///     New query matcher part.
-            /// </summary>
-            /// <param name="property">The property that will be matched.</param>
-            /// <param name="part">The condition part that is wrapping this.</param>
-            internal QueryMatcherPart(AutomationProperty property, QueryConditionPart part)
-                : base(part) {
-                Property = property;
-            }
-
-            /// <summary>
-            ///     The property that this matcher will check.
-            /// </summary>
-            private AutomationProperty Property { get; set; }
-
-            #region Matchers
-
-            /// <summary>
-            ///     Adds a property condition.
-            /// </summary>
-            /// <param name="value">The expected value.</param>
-            /// <returns>The operator part of the query.</returns>
-            public QueryOperatorPart Is(object value) {
-                return ApplyMatcher(value);
-            }
-
-            /// <summary>
-            ///     Adds a starts with condition.
-            /// </summary>
-            /// <param name="value">The expected value.</param>
-            /// <returns>The operator part of the query.</returns>
-            public QueryOperatorPart StartsWith(string value) {
-                return ApplyMatcher(value, Util.Matchers.StartsWith);
-            }
-
-            /// <summary>
-            ///     Adds an ends with condition.
-            /// </summary>
-            /// <param name="value">The expected value.</param>
-            /// <returns>The operator part of the query.</returns>
-            public QueryOperatorPart EndsWith(string value) {
-                return ApplyMatcher(value, Util.Matchers.EndsWith);
-            }
-
-            /// <summary>
-            ///     Adds a contains condition.
-            /// </summary>
-            /// <param name="value">The expected value.</param>
-            /// <returns>The operator part of the query.</returns>
-            public QueryOperatorPart Contains(string value) {
-                return ApplyMatcher(value, Util.Matchers.Contains);
-            }
-
-            /// <summary>
-            ///     Adds a regex condition.
-            /// </summary>
-            /// <param name="pattern">The regeular expression to match.</param>
-            /// <returns>The operator part of the query.</returns>
-            public QueryOperatorPart Matches(string pattern) {
-                return ApplyMatcher(pattern, Util.Matchers.Regex);
-            }
-
-            #endregion
-
-            /// <summary>
-            ///     Applies the required string property condition in the condition part of the query.
-            /// </summary>
-            /// <param name="value">The expected value for the condition.</param>
-            /// <param name="matcher">The matcher to use to check the condition.</param>
-            /// <returns>THe operator part of the query.</returns>
-            private QueryOperatorPart ApplyMatcher(string value, Matcher<string> matcher) {
-                if (!(Query.Engine is TreeWalkerSearchEngine))
-                    throw new QueryConstructionException("Cannot apply matcher - Search engine is not a TreeWalker");
-
-                ConditionPart.ApplyCondition(new StringPropertyCondition(Property, value, matcher));
-                return ConditionPart.OperatorPart;
-            }
-
-            /// <summary>
-            ///     Applies the required property condition in the condition part of the query.
-            /// </summary>
-            /// <param name="value">The expected value for the condition.</param>
-            /// <returns>THe operator part of the query.</returns>
-            private QueryOperatorPart ApplyMatcher(object value) {
-                ConditionPart.ApplyCondition(new PropertyCondition(Property, value));
-                return ConditionPart.OperatorPart;
-            }
-
-        }
-
-        /// <summary>
-        ///     Represents the operator part of the conditions of a query.
-        /// </summary>
-        public class QueryOperatorPart : QueryConditionPartPart {
-
-            /// <summary>
-            ///     New query operator part.
-            /// </summary>
-            /// <param name="part">The condition part that is wrapping this.</param>
-            internal QueryOperatorPart(QueryConditionPart part) : base(part) {}
-
-            #region Operators
-
-            /// <summary>
-            ///     Sets the active binary operator to a logical "and".
-            /// </summary>
-            /// <returns>This condition part.</returns>
-            public QueryConditionPart And() {
-                ConditionPart.SetBinaryOperator(Util.Operators.And);
-
-                return ConditionPart;
-            }
-
-            /// <summary>
-            ///     Sets the active binary operator to a logical "or".
-            /// </summary>
-            /// <returns>This condition part.</returns>
-            public QueryConditionPart Or() {
-                ConditionPart.SetBinaryOperator(Util.Operators.Or);
-
-                return ConditionPart;
-            }
-
-            #endregion
-
-            #region Select methods
-
-            /// <summary>
-            ///     Return the constructed query.
-            /// </summary>
-            /// <returns>The query.</returns>
-            public Query Select() {
-                if (Query.Conditions == null)
-                    throw new QueryConstructionException("Cannot select - No conditions have been specified");
-
-                return Query;
-            }
-
-            #endregion
         }
 
     }

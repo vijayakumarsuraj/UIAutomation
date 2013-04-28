@@ -41,6 +41,8 @@
     <Compile Include="Tree\QueryContructionException.cs" />
     <Compile Include="Tree\QueryParts\QueryConditionPart.cs" />
     <Compile Include="Tree\QueryParts\QueryEnginePart.cs" />
+    <Compile Include="Tree\QueryParts\QueryMatcherPart.cs" />
+    <Compile Include="Tree\QueryParts\QueryOperatorPart.cs" />
     <Compile Include="Tree\QueryParts\QueryScopePart.cs" />
     <Compile Include="Tree\QueryParts\QueryWherePart.cs" />
     <Compile Include="Tree\SearchEngines\DefaultSearchEngine.cs" />
