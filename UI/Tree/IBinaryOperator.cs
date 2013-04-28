@@ -1,6 +1,6 @@
 ﻿using System.Windows.Automation;
 
-namespace Automation.UI.Tree.Operators {
+namespace Automation.UI.Tree {
 
     /// <summary>
     ///     Represents a binary operator that can be applied to two conditions.

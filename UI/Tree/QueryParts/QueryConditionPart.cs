@@ -1,7 +1,5 @@
 ﻿using System.Windows.Automation;
 
-using Automation.UI.Tree.Operators;
-
 namespace Automation.UI.Tree.QueryParts {
 
     /// <summary>

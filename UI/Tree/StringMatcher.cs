@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Automation.UI.Tree.Matchers {
+namespace Automation.UI.Tree {
 
     /// <summary>
     ///     Represents a matcher that works with string objects.

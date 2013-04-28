@@ -60,12 +60,12 @@
     <Compile Include="Util\Matchers.cs" />
     <Compile Include="Tree\Matchers\RegexMatcher.cs" />
     <Compile Include="Tree\Matchers\StartsWithMatcher.cs" />
-    <Compile Include="Tree\Matchers\StringMatcher.cs" />
+    <Compile Include="Tree\StringMatcher.cs" />
     <Compile Include="Tree\Operators\AndOperator.cs" />
-    <Compile Include="Tree\Operators\IBinaryOperator.cs" />
+    <Compile Include="Tree\IBinaryOperator.cs" />
     <Compile Include="Tree\IOperator.cs" />
     <Compile Include="Tree\Matcher.cs" />
-    <Compile Include="Tree\Operators\IUnaryOperator.cs" />
+    <Compile Include="Tree\IUnaryOperator.cs" />
     <Compile Include="Tree\Operators\NotOperator.cs" />
     <Compile Include="Util\Operators.cs" />
     <Compile Include="Tree\Operators\OrOperator.cs" />

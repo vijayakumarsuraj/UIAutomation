@@ -24,7 +24,7 @@ namespace Automation.UI {
         /// <summary>
         ///     The underlying element wrapped by this component.
         /// </summary>
-        public AutomationElement Element { get; protected set; }
+        public AutomationElement Element { get; private set; }
 
         /// <summary>
         ///     Construct a new query for searching under this component.

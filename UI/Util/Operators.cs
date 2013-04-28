@@ -1,4 +1,5 @@
-﻿using Automation.UI.Tree.Operators;
+﻿using Automation.UI.Tree;
+using Automation.UI.Tree.Operators;
 
 namespace Automation.UI.Util {
 

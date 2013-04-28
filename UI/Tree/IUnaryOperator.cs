@@ -1,6 +1,6 @@
 ﻿using System.Windows.Automation;
 
-namespace Automation.UI.Tree.Operators {
+namespace Automation.UI.Tree {
 
     /// <summary>
     ///     Represents a unary operator that can be applied to a single condition.

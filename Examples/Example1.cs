@@ -15,7 +15,7 @@ namespace Automation.UI.Examples {
             example.PatternExample();
         }
 
-        public void QueryExample() {
+        private void QueryExample() {
             var root = AutomationElement.RootElement;
             var window = UITree.Query(root).UsingTreeWalkerEngine()
                 // Query 1.
@@ -38,7 +38,7 @@ namespace Automation.UI.Examples {
             Console.WriteLine(titleBar.Current.Name);
         }
 
-        public void QueryBuilderExample() {
+        private void QueryBuilderExample() {
             var root = AutomationElement.RootElement;
             var titleBar = UITree
                 .Query(root).UsingTreeWalkerEngine()
@@ -60,7 +60,7 @@ namespace Automation.UI.Examples {
             Console.WriteLine(titleBar.Current.Name);
         }
 
-        public void PatternExample() {
+        private void PatternExample() {
             var root = AutomationElement.RootElement;
             var window = UITree.Query(root).UsingTreeWalkerEngine()
                 // Query 1.
