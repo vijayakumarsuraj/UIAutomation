@@ -1,12 +1,11 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Automation;
 
-using Automation.UI;
 using Automation.UI.Tree.QueryParts;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UI.Tests {
+namespace Automation.UI.Tests {
 
     /// <summary>
     /// Tests the various condition matchers.

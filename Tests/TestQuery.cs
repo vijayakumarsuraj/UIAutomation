@@ -1,11 +1,10 @@
 ﻿using System.Windows.Automation;
 
-using Automation.UI;
 using Automation.UI.Tree.QueryParts;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace UI.Tests {
+namespace Automation.UI.Tests {
 
     /// <summary>
     /// Tests the various methods of the query interface.
