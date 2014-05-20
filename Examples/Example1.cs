@@ -23,19 +23,15 @@ namespace Automation.UI.Examples {
                 .Name().Contains("Microsoft Visual Studio")
                 .And()
                 .Type().Is(ControlType.Window)
-                .Select().FirstResult()
-                // Get the underlying automation element of query 1.
-                .Element;
+                .Select().FirstResult();
 
             var titleBar = UITree.Query(window).UsingDefaultEngine()
                 // Query 2
                 .FindChildren().Where()
                 .Type().Is(ControlType.TitleBar)
-                .Select().FirstResult()
-                // Get the underlying automation element of query 2.
-                .Element;
+                .Select().FirstResult();
 
-            Console.WriteLine(titleBar.Current.Name);
+            Console.WriteLine(titleBar.Element.Current.Name);
         }
 
         private void QueryBuilderExample() {
@@ -53,11 +49,9 @@ namespace Automation.UI.Examples {
                 // Query 2
                 .FindChildren().Where()
                 .Type().Is(ControlType.TitleBar)
-                .Select().FirstResult()
-                // Get the underlying automation element of query 2.
-                .Element;
+                .Select().FirstResult();
 
-            Console.WriteLine(titleBar.Current.Name);
+            Console.WriteLine(titleBar.Element.Current.Name);
         }
 
         private void PatternExample() {
@@ -69,8 +63,6 @@ namespace Automation.UI.Examples {
                 .And()
                 .Type().Is(ControlType.Window)
                 .Select().FirstResult();
-            // Execute using the 'Window' pattern.
-            window.Execute<WindowPattern>(p => p.SetWindowVisualState(WindowVisualState.Minimized));
 
             var windows = UITree.Query(root).UsingTreeWalkerEngine()
                 // Query 2.
@@ -79,8 +71,14 @@ namespace Automation.UI.Examples {
                 .And()
                 .Type().Is(ControlType.Window)
                 .Select().AllResults();
-            // Execute for all matched components using the 'Window' pattern.
-            windows.Execute<WindowPattern>(p => p.SetWindowVisualState(WindowVisualState.Minimized));
+
+            // Execute using the 'Window' pattern.
+            window.Execute<WindowPattern>(p => p.SetWindowVisualState(WindowVisualState.Minimized));
+            // Can also be called on a collection of UI components.
+            windows.Execute<WindowPattern>((p, c) => p.SetWindowVisualState(WindowVisualState.Minimized));
+
+            // Or, using the .Pattern() method (only available on single components).
+            window.Pattern<WindowPattern>().SetWindowVisualState(WindowVisualState.Minimized);
         }
 
     }

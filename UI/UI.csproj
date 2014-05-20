@@ -37,6 +37,7 @@
     <Reference Include="UIAutomationTypes" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application.cs" />
     <Compile Include="Tree\ElementNotFoundException.cs" />
     <Compile Include="Tree\QueryConstructionException.cs" />
     <Compile Include="Tree\QueryParts\QueryConditionPart.cs" />

@@ -46,6 +46,14 @@ namespace Automation.UI.Tree.QueryParts {
         }
 
         /// <summary>
+        ///     Search using the process id property.
+        /// </summary>
+        /// <returns>The matcher part of the query.</returns>
+        public QueryMatcherPart ProcessId() {
+            return Property(AutomationElement.ProcessIdProperty);
+        }
+
+        /// <summary>
         ///     Search using the name property.
         /// </summary>
         /// <returns>The matcher part of the query.</returns>

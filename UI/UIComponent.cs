@@ -35,14 +35,12 @@ namespace Automation.UI {
         }
 
         /// <summary>
-        ///     Executes the specified action using a pattern for this component.
+        ///     Get the specified pattern for this component.
         /// </summary>
         /// <typeparam name="T">The type of the pattern.</typeparam>
-        /// <param name="actions">The actions to execute.</param>
-        /// <returns>This UI component.</returns>
-        public UIComponent Execute<T>(Action<T> actions) where T : BasePattern {
-            actions(AutomationElementHelper.GetPattern<T>(Element));
-            return this;
+        /// <returns>The pattern.</returns>
+        public T Pattern<T>() where T : BasePattern {
+            return AutomationElementHelper.GetPattern<T>(Element);
         }
 
         /// <summary>
@@ -51,8 +49,8 @@ namespace Automation.UI {
         /// <typeparam name="T">The type of the pattern.</typeparam>
         /// <param name="actions">The actions to execute.</param>
         /// <returns>This UI component.</returns>
-        public UIComponent Execute<T>(Action<T, UIComponent> actions) where T : BasePattern {
-            actions(AutomationElementHelper.GetPattern<T>(Element), this);
+        public UIComponent Execute<T>(Action<T> actions) where T : BasePattern {
+            actions(AutomationElementHelper.GetPattern<T>(Element));
             return this;
         }
 
