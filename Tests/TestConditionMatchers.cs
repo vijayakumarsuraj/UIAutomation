@@ -56,7 +56,7 @@ namespace Automation.UI.Tests {
         /// </summary>
         [TestMethod]
         public void TestRegexMatcher() {
-            const string nameToSearch = @"[\w]+ - Microsoft Visual Studio$";
+            const string nameToSearch = @"[\w]+ - Microsoft Visual Studio";
             // Fire the query.
             var window = Query().Where()
                 .Name().Matches(nameToSearch)

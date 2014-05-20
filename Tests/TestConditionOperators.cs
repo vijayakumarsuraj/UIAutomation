@@ -31,12 +31,12 @@ namespace Automation.UI.Tests {
             var window = Query().Where()
                 .Name().StartsWith(nameToSearch1)
                 .And()
-                .Name().EndsWith(nameToSearch2)
+                .Name().Contains(nameToSearch2)
                 .Select().FirstResult();
             // Validate the result.
             Assert.IsNotNull(window);
             var currentName = window.Element.Current.Name;
-            Assert.IsTrue(currentName.StartsWith(nameToSearch1) && currentName.EndsWith(nameToSearch2));
+            Assert.IsTrue(currentName.StartsWith(nameToSearch1) && currentName.Contains(nameToSearch2));
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Automation.UI.Tests {
             var window = Query().Where()
                 .Name().StartsWith(nameToSearch1)
                 .Or()
-                .Name().EndsWith(nameToSearch2)
+                .Name().Contains(nameToSearch2)
                 .Select().FirstResult();
             // Validate the result.
             Assert.IsNotNull(window);

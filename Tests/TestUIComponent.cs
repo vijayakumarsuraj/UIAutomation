@@ -29,7 +29,7 @@ namespace Automation.UI.Tests {
             var windows = Query().Where()
                 .Name().StartsWith("UIAutomation")
                 .And()
-                .Name().EndsWith("Visual Studio")
+                .Name().Contains("Visual Studio")
                 .Select().AllResults();
             // Validate the result.
             Assert.IsNotNull(windows);
@@ -55,7 +55,7 @@ namespace Automation.UI.Tests {
             var window = Query().Where()
                 .Name().StartsWith("UIAutomation")
                 .And()
-                .Name().EndsWith("Visual Studio")
+                .Name().Contains("Visual Studio")
                 .Select().FirstResult();
             // Validate the result.
             Assert.IsNotNull(window);
